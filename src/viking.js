@@ -18,6 +18,7 @@ class Viking extends Soldier {
         super(health, strength);
         this.name = name;       
     }
+
     receiveDamage(damage) {
         this.health -= damage;
         if (this.health === 0) {
@@ -35,10 +36,10 @@ class Viking extends Soldier {
 class Saxon extends Soldier{
     receiveDamage(damage) {
         this.health -= damage;
-        if (this.health === 0) {
-            return `A Saxon has died in combat`
-        } else {
+        if (this.health > 0) {
             return `A Saxon has received ${damage} points of damage`
+        } else {
+            return `A Saxon has died in combat`
         }
     }
 }
@@ -56,39 +57,67 @@ class War {
         this.saxonArmy.push(saxon)
     }
     vikingAttack() {
-        let saxonFighter = '';
-        let vikingFighter = ''
-    for (let i = 0 ; i < this.saxonArmy.length; i++) {
-       saxonFighter = this.saxonArmy[Math.floor(Math.random() * this.saxonArmy.length)];
-       //console.log(saxonFighter.health)  
-    };
+        const saxonIndex = Math.floor(Math.random() * this.saxonArmy.length);
+        const vikingIndex = Math.floor(Math.random() * this.saxonArmy.length);
 
-    for (let i = 0 ; i < this.saxonArmy.length; i++) {
-        vikingFighter = this.vikingArmy[Math.floor(Math.random() * this.saxonArmy.length)];
-        //console.log(vikingFighter.strength)  
-    }
-        let damage = saxonFighter.receiveDamage(vikingFighter.strength)
-     //   console.log(this.saxonArmy.indexOf(saxonFighter))
-     if (damage < 0){
-         this.SaxonArmy.splice(this.saxonArmy.indexOf(saxonFighter),1);
-         return this.SaxonArmy.length   
-        }   
-     return damage;
+        const saxon = this.saxonArmy[saxonIndex];
+        const viking = this.vikingArmy[vikingIndex];
 
+        const message = saxon.receiveDamage(viking.strength);
+        if(saxon.health < 1) {
+            this.saxonArmy.splice(saxonIndex, 1)
+        }
         
-
-       
+        return message;
 
      }
    
          
 
-   // saxonAttack() {
+    saxonAttack() {
+        const saxonIndex = Math.floor(Math.random() * this.saxonArmy.length);
+        const vikingIndex = Math.floor(Math.random() * this.saxonArmy.length);
 
-   // }
-   // showStatus() {
+        const saxon = this.saxonArmy[saxonIndex];
+        const viking = this.vikingArmy[vikingIndex];
 
-   // }
+        const message = viking.receiveDamage(saxon.strength);
+        if(viking.health < 1) {
+            this.vikingArmy.splice(vikingIndex, 1)
+        }
+    
+    return message;
+         
+   }
+
+/* generic attack: Todo
+attack(attackArmy, defendArmy) {
+    const attackerIndex = Math.floor(Math.random() * attackArmy.length);
+    const defenderIndex = Math.floor(Math.random() * defendArmy.length);
+
+    const attackerSoldier = attackArmy[attackerIndex];
+    const defenderSoldier = defendArmy[defenderIndex];
+
+    const message = defenderSoldier.receiveDamage(attackerSoldier.strength);
+    if (defenderSoldier.health < 1) {
+      defendArmy.splice(defenderIndex, 1);
+    }
+    return message;
+  }
+*/
+
+    showStatus() {
+    //    if the Saxon array is empty, should return "Vikings have won the war of the century!"
+    if (this.saxonArmy.length === 0) { return `Vikings have won the war of the century!`}
+    
+// if the Viking array is empty, should return "Saxons have fought for their lives and survived another day..."
+
+    else if (this.vikingArmy.length === 0) {return `Saxons have fought for their lives and survived another day...`}
+
+//if there are at least 1 Viking and 1 Saxon, should return "Vikings and Saxons are still in the thick of battle."
+
+else { return "Vikings and Saxons are still in the thick of battle."}
+    }
 
 }
 
